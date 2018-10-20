@@ -1,2 +1,1 @@
-Este projeto faz parte do projeto da porta de reconhecimento facial com bertura e
-fechamento automatico. Arquivos voltados para a eletronica embarcada.
+Este projeto faz parte da disciplina de PI2 do curso de Engenhria Eletronica UNB-FGA. O projeto é uma porta de reconhecimento facial com bertura e fechamento automático. Estes arquivos são voltados para a Eletrônica embarcada.
