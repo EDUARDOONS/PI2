@@ -1,0 +1,10 @@
+git local
+git commit -am "Buzzer/referencias"
+git add --all
+git status
+ 
+ao final jogar para remoto
+git push -u origin master
+
+Pegar do remoto
+git pull origin master
