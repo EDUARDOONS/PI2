@@ -6,8 +6,8 @@ import sys
           
 while True:  
     try:
-          PIN_TRIGGER = 7
-          PIN_ECHO = 11
+          PIN_TRIGGER = 18
+          PIN_ECHO = 24
           GPIO.setmode(GPIO.BOARD)
           GPIO.setup(PIN_TRIGGER, GPIO.OUT)
           GPIO.setup(PIN_ECHO, GPIO.IN)
