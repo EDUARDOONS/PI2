@@ -1,0 +1,130 @@
+#Declaração bibliotecas
+import RPi.GPIO as GPIO
+import time
+
+#Conexão dos sensores fim de curso no pino 3Vcc da Raspberry e retoro no pinos indicados abaixo:
+BtnPin1 = 22    # Fim_curso1 
+BtnPin2 = 16    # Fim_curso2
+
+#Rele:
+Rele = 12       # Acionamento do Rele (Pino IN no rele), 5Vcc e Gnd da raspeberry.
+
+#Sensores LDR:
+Sensor = 37     # Conexão do pino de saida do CI Logico OR, conexão dos 3 sensores LDR.
+
+#Comando do servidor: 0 (Liberar) ou 1 (bloquear)
+servidor = 0
+
+#Configurar Pinos:
+GPIO.setmode(GPIO.BOARD)
+ 
+#Define o pino do botao(btnpinX) como entrada.
+GPIO.setup(BtnPin1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(BtnPin2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(Sensor, GPIO.IN)
+
+#Aciona o Relay
+GPIO.setup(Rele, GPIO.OUT)
+
+#inicio do programa
+try:
+    while True:
+#Condições de Operação:
+#Grupo 1:
+        if (servidor == 0 or servidor == 1) and (GPIO.input(Sensor) == False) and (GPIO.input(BtnPin1) == False and GPIO.input(BtnPin2) == False): # Sensores não acionado e a porta em movimento
+            #Emiti mensagem no Display
+	    	print('Porta em movimento')
+
+	    # Buzzer desligado
+
+	    #Destrava tranca, acionando o relé
+		GPIO.output(Rele,0) 
+
+        elif (servidor == 0 or servidor == 1) and (GPIO.input(Sensor) == True) and (GPIO.input(BtnPin1) == False and GPIO.input(BtnPin2) == False): # Sensores acionado e a porta em movimento
+            #Emiti mensagem no Display
+	    	print('Porta em movimento')
+
+	    # Buzzer Ligado
+		
+	    # Motor abrindo porta
+
+	    #Destrava tranca, acionando o relé
+		GPIO.output(Rele,0) 
+
+	elif (servidor == 0 or servidor == 1) and (GPIO.input(Sensor) == True) and (GPIO.input(BtnPin2) == True) and (GPIO.input(BtnPin1) == False) # Sensores acionado e a porta aberta
+             #Emiti mensagem no Display
+	    	print('Sensor Acionado - Porta Aberta')
+	    # Motor Desligado
+
+	    # Buzzer Ligado
+
+	    #Destrava tranca, acionando o relé
+		GPIO.output(Rele,0)           
+
+#Grupo 2:
+	elif (servidor == 0) and (GPIO.input(Sensor) == False) and (GPIO.input(BtnPin2) == True) and (GPIO.input(BtnPin1) == False) # Sensores não acionado e a porta aberta
+             #Emiti mensagem no Display
+	    	print('Porta Aberta')
+	    # Motor Desligado
+
+	    # Buzzer Desligado
+
+	    #Destrava tranca, acionando o relé
+		GPIO.output(Rele,0)  
+
+	elif (servidor == 0) and (GPIO.input(Sensor) == False) and (GPIO.input(BtnPin2) == False) and (GPIO.input(BtnPin1) == True) # Sensores não acionado e a porta fechada
+             #Emiti mensagem no Display
+	    	print('Abrindo Porta')
+	    # Motor abre porta
+
+	    # Buzzer Desligado
+
+	    #Destrava tranca, acionando o relé
+		GPIO.output(Rele,0)  
+
+	elif (servidor == 0) and (GPIO.input(Sensor) == True) and (GPIO.input(BtnPin2) == False) and (GPIO.input(BtnPin1) == True) # Sensores acionado e a porta fechada
+             #Emiti mensagem no Display
+	    	print('Abrindo Porta')
+	    # Motor abre porta
+
+	    # Buzzer Ligado
+
+	    #Destrava tranca, acionando o relé
+		GPIO.output(Rele,0)
+#Grupo 3:
+	elif (servidor == 1) and (GPIO.input(Sensor) == False) and (GPIO.input(BtnPin2) == True) and (GPIO.input(BtnPin1) == False) # Sensores nao acionado e a porta aberta
+             #Emiti mensagem no Display
+	    	print('Fechando Porta')
+	    # Motor fecha porta
+
+	    # Buzzer Desligado
+
+	    #Destrava tranca, acionando o relé
+		GPIO.output(Rele,0)	
+
+	elif (servidor == 1) and (GPIO.input(Sensor) == True) and (GPIO.input(BtnPin2) == False) and (GPIO.input(BtnPin1) == True) # Sensores acionado e a porta fechada
+             #Emiti mensagem no Display
+	    	print('Porta Fechada')
+	    # Motor Desligado
+
+	    # Buzzer Desligado
+
+	    #trava tranca, não acionando o relé
+		GPIO.output(Rele,1)
+
+	elif (servidor == 1) and (GPIO.input(Sensor) == False) and (GPIO.input(BtnPin2) == False) and (GPIO.input(BtnPin1) == True) # Sensores não acionado e a porta fechada
+             #Emiti mensagem no Display
+	    	print('Acionado Sensor - Porta Fechada')
+	    # Motor Desligado
+
+	    # Buzzer ligado
+
+	    #trava tranca, não acionando o relé
+		GPIO.output(Rele,1)
+       
+except KeyboardInterrupt:
+    # Ctrl+C foi pressionado
+        pass
+
+# Limpa configuração
+GPIO.cleanup()  
